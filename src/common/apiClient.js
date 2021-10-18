@@ -1,5 +1,34 @@
 import axios from 'axios';
 import ApiError from '../exceptions/ApiError';
+import urls from './urls';
+
+const api = axios.create({
+  withCredentials: true,
+  baseURL: process.env.API_URL,
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('accessToken');
+  config.headers.Authorization = `Bearer ${token}`;
+
+  return config;
+});
+
+api.interceptors.response.use((config) => config, async (error) => {
+  const originalRequest = error.config;
+  if (error.response.status === 401 && originalRequest?.isRetry) {
+    originalRequest.isRetry = true;
+    try {
+      // update access token
+      const response = await axios.get(`${process.env.API_URL}/${urls.user.refresh}`, { withCredentials: true });
+      localStorage.accessToken = response.accessToken;
+      return api.request(originalRequest);
+    } catch {
+      console.log('Not authorized');
+    }
+  }
+  throw error;
+});
 
 export const getApiError = (error) => {
   const response = error?.response;
@@ -14,7 +43,7 @@ export const getApiError = (error) => {
 
 export const get = async (url, params) => {
   try {
-    const response = await axios.get(url, { params });
+    const response = await api.get(url, { params });
     return response.data;
   } catch (error) {
     throw getApiError(error);
@@ -23,7 +52,7 @@ export const get = async (url, params) => {
 
 export const post = async (url, data) => {
   try {
-    const response = await axios.post(url, data);
+    const response = await api.post(url, data);
     return response.data;
   } catch (error) {
     throw getApiError(error);

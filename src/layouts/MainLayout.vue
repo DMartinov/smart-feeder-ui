@@ -29,7 +29,7 @@ export default {
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
-      loggedIn: computed(() => store.getters[getters.loggedIn]),
+      loggedIn: computed(() => store.getters[getters.isLoggedIn]),
     };
   },
 };

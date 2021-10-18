@@ -1,9 +1,13 @@
-export const base64ToObject = (base64Payload) => decodeURIComponent(escape(atob(base64Payload)));
+export const base64ToObject = (base64Payload) => {
+  const dataString = decodeURIComponent(escape(atob(base64Payload)));
+  return JSON.parse(dataString);
+};
 
 export const parseJwt = (token) => {
   const base64Payload = token.split('.')[1];
 
-  return base64ToObject(base64Payload);
+  const { payload } = base64ToObject(base64Payload);
+  return payload;
 };
 
 export const isValidEmail = (val) => {

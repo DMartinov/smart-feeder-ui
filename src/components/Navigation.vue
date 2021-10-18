@@ -1,7 +1,7 @@
 <template>
   <q-list>
     <template v-for="(menuItem, index) in navMenuList" :key="index">
-      <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple>
+      <q-item :to="menuItem.link" clickable :active="menuItem.label === 'Outbox'" v-ripple>
         <q-item-section avatar>
           <q-icon :name="menuItem.icon" />
         </q-item-section>

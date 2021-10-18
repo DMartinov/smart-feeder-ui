@@ -8,7 +8,7 @@
           </q-avatar>
           Smart Feeder
         </q-toolbar-title>
-        <q-btn v-if="loggedIn" flat>Sign out</q-btn>
+        <q-btn v-if="loggedIn" flat @click="signOut">Sign out</q-btn>
       </q-toolbar>
     </q-header>
 </template>
@@ -16,18 +16,25 @@
 <script>
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
-import { getters } from '../store/types';
+import { useRouter } from 'vue-router';
+import routeNames from '../router/routeNames';
+import { getters, actions } from '../store/types';
 
 export default defineComponent({
   emits: ['menu-click'],
   setup(props, context) {
     const store = useStore();
+    const router = useRouter();
 
     return {
       leftDrawerClick() {
         context.emit('menu-click');
       },
-      loggedIn: computed(() => store.getters[getters.loggedIn]),
+      async signOut() {
+        await store.dispatch(actions.logOut);
+        router.push({ name: routeNames.login });
+      },
+      loggedIn: computed(() => store.getters[getters.isLoggedIn]),
     };
   },
 });

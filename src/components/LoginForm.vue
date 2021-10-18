@@ -1,5 +1,5 @@
 <template>
-<q-form class="q-gutter-md" @submit="logIn" ref="loginForm">
+<q-form class="q-gutter-md" @submit="logIn">
     <q-input
         v-model="email"
         filled
@@ -16,9 +16,7 @@
       label="Password"
       :type="isPwd ? 'password' : 'text'"
       lazy-rules
-      :error="hasError('password')"
-      :error-message="errorMessage('password')"
-      :rules="passwordRules">
+    >
         <template v-slot:append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -44,13 +42,14 @@ import { notifyError } from '../common/notification';
 export default defineComponent({
   setup() {
     const isPwd = ref(true);
-    const password = ref('Qweqwe_123');
-    const email = ref('martinov.dmitry@gmail.com');
+    const password = ref('');
+    const email = ref('');
     const errors = ref(null);
 
     const store = useStore();
     const router = useRouter();
 
+    // TODO: add hook
     const hasError = (fieldName) => {
       if (errors.value != null) {
         return errors.value.some((error) => error.param === fieldName);
@@ -59,6 +58,7 @@ export default defineComponent({
       return false;
     };
 
+    // TODO: add hook
     const errorMessage = (fieldName) => {
       if (errors.value != null) {
         const error = errors.value.find((e) => e.param === fieldName);
@@ -87,7 +87,6 @@ export default defineComponent({
       emailRules: [
         (val) => (val != null && isValidEmail(val)) || 'Invalid email',
       ],
-      passwordRules: [(val) => (val != null && val.length > 8) || 'Please use minimum 8 characters'],
       logIn,
       hasError,
       errorMessage,

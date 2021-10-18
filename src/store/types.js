@@ -1,14 +1,19 @@
 export const actions = {
   init: 'init',
   getUserDevices: 'getUserDevices',
+  sendRegistrationLink: 'sendRegistrationLink',
+  signUp: 'signUp',
   logIn: 'logIn',
-  getUser: 'getUser',
+  logOut: 'logOut',
+  checkAuth: 'checkAuth',
+  getUsers: 'getUsers',
+  deleteUser: 'deleteUser',
 };
 
 export const mutations = {
   setUserDevices: 'setUserDevices',
   setUser: 'setUser',
-  setInitialized: 'setInitialized',
+  setUsers: 'setUsers',
   setLoading: 'setLoading',
 };
 

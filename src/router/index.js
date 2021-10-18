@@ -30,7 +30,7 @@ export default route(({ store/* , ssrContext */ }) => {
   });
 
   Router.beforeEach((to, from, next) => {
-    if (to.name === routeNames.login) {
+    if (to.name === routeNames.login || to.name === routeNames.signUp) {
       // login route is always  okay (we could use the requires auth flag below).
       // prevent a redirect loop
       next();
