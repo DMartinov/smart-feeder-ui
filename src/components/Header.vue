@@ -8,6 +8,7 @@
           </q-avatar>
           Smart Feeder
         </q-toolbar-title>
+        <div class="username">{{ username }}</div>
         <q-btn v-if="loggedIn" flat @click="signOut">Sign out</q-btn>
       </q-toolbar>
     </q-header>
@@ -35,11 +36,15 @@ export default defineComponent({
         router.push({ name: routeNames.login });
       },
       loggedIn: computed(() => store.getters[getters.isLoggedIn]),
+      username: computed(() => store.state.user?.name),
     };
   },
 });
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+  .username {
+    flex: 1 1 0%;
+    font-size: 1.25rem;
+  }
 </style>

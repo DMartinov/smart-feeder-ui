@@ -1,11 +1,10 @@
 const userBaseUrl = 'user';
-const usersBaseUrl = 'users';
 const deviceBaseUrl = 'device';
-const historyBaseUrl = 'history';
-const deviceLogBaseUrl = 'device-log';
-const scheduleBaseUrl = 'schedule';
+// const historyBaseUrl = 'history';
+// const deviceLogBaseUrl = 'device-log';
+// const scheduleBaseUrl = 'schedule';
 
-export default {
+export const apiUrls = {
   user: {
     logIn: `${userBaseUrl}/login`,
     sendRegistrationLink: `${userBaseUrl}/sendRegistrationLink`,
@@ -21,17 +20,25 @@ export default {
     add: `${deviceBaseUrl}/add`,
     updateState: `${deviceBaseUrl}/updateState`,
     setCommand: `${deviceBaseUrl}/setCommand`,
+    delete: `${deviceBaseUrl}/delete`,
+  },
+
+};
+
+export const link = {
+  device: {
+    index: '/device',
   },
   history: {
-    index: historyBaseUrl,
+    index: '/history',
   },
   deviceLog: {
-    index: deviceLogBaseUrl,
+    index: '/device-log',
   },
   schedule: {
-    index: scheduleBaseUrl,
+    index: '/schedule',
   },
   users: {
-    index: usersBaseUrl,
+    index: '/users',
   },
 };

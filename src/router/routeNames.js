@@ -3,4 +3,5 @@ export default {
   dashboard: 'dashboard',
   users: 'users',
   signUp: 'signUp',
+  devices: 'devices',
 };

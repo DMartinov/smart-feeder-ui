@@ -25,6 +25,8 @@
 <script>
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
+import routeNames from '../router/routeNames';
 import { getters } from '../store/types';
 import Tank from '../components/Tank.vue';
 
@@ -33,6 +35,13 @@ export default defineComponent({
   components: { Tank },
   setup() {
     const store = useStore();
+    const router = useRouter();
+    const route = useRoute();
+
+    if (!route.params.deviceId) {
+      router.push({ name: routeNames.devices });
+    }
+
     return {
       device: computed(() => store.getters[getters.getDeviceById](1) ?? {}),
     };

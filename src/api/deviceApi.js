@@ -1,18 +1,16 @@
-// import { get } from './deviceApi';
-// import url from '../common/urls';
+import { get, post } from 'src/common/apiClient';
+import { apiUrls as url } from '../common/urls';
 
 export default {
   async getUserDevices() {
-    return new Promise((resolve) => (resolve([{
-      id: 1,
-      name: 'Spyke',
-      status: 'Online',
-      command: null,
-      commandState: null,
-      message: null,
-      charge: 56,
-      feed: 70,
-      water: 85,
-    }])));
+    return get(url.device.getDevices);
+  },
+
+  async addDevice({ name, login, password }) {
+    return post(url.device.add, { name, login, password });
+  },
+
+  async deleteDevice(id) {
+    return post(url.device.delete, { id });
   },
 };

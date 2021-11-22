@@ -67,6 +67,8 @@ export default {
       return null;
     };
 
+    const close = () => context.emit('close');
+
     return {
       show,
       email,
@@ -76,9 +78,7 @@ export default {
       hasError,
       errorMessage,
       loading: computed(() => store.getters[getters.isLoading](actions.sendRegistrationLink)),
-      close() {
-        context.emit('close');
-      },
+      close,
       async sendInvintation() {
         try {
           await store.dispatch(actions.sendRegistrationLink, email.value);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ApiError from '../exceptions/ApiError';
-import urls from './urls';
+import { apiUrls as urls } from './urls';
 
 const api = axios.create({
   withCredentials: true,

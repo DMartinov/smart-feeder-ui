@@ -8,6 +8,8 @@ export const actions = {
   checkAuth: 'checkAuth',
   getUsers: 'getUsers',
   deleteUser: 'deleteUser',
+  addDevice: 'addDevice',
+  deleteDevice: 'deleteDevice',
 };
 
 export const mutations = {

@@ -41,20 +41,20 @@ export default store((/* { ssrContext } */) => {
          * @property {Boolean} role
          * @property {Array} devices
         */
-        users: null,
+        users: [],
         devices: [],
         loader: { isLoading: false, action: null },
       };
     },
     mutations: {
       [mutations.setUserDevices](state, devices) {
-        state.devices = devices;
+        state.devices = devices ?? [];
       },
       [mutations.setUser](state, user) {
         state.user = user;
       },
       [mutations.setUsers](state, users) {
-        state.users = users;
+        state.users = users ?? [];
       },
       [mutations.setLoading](state, { isLoading, action }) {
         state.loader = { isLoading, action };
@@ -79,6 +79,17 @@ export default store((/* { ssrContext } */) => {
       async [actions.getUserDevices]({ commit }) {
         const devices = await deviceApi.getUserDevices();
         commit(mutations.setUserDevices, devices);
+      },
+
+      async [actions.addDevice]({ commit, dispatch }, { name, login, password }) {
+        commit(mutations.setLoading, { isLoading: true, action: actions.addDevice });
+
+        try {
+          await deviceApi.addDevice({ name, login, password });
+          await dispatch(actions.getUserDevices);
+        } finally {
+          commit(mutations.setLoading, { isLoading: false });
+        }
       },
 
       async [actions.logIn]({ commit, dispatch }, { email, password }) {
@@ -120,6 +131,16 @@ export default store((/* { ssrContext } */) => {
         try {
           await userApi.deleteUser(id);
           await dispatch(actions.getUsers);
+        } finally {
+          commit(mutations.setLoading, { isLoading: false });
+        }
+      },
+
+      async [actions.deleteDevice]({ commit, dispatch }, id) {
+        commit(mutations.setLoading, { isLoading: true, action: actions.deleteDevice });
+        try {
+          await deviceApi.deleteDevice(id);
+          await dispatch(actions.getUserDevices);
         } finally {
           commit(mutations.setLoading, { isLoading: false });
         }

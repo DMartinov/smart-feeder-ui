@@ -1,5 +1,5 @@
 import axios from 'axios';
-import url from '../common/urls';
+import { apiUrls as url } from '../common/urls';
 import { parseJwt } from '../common/utils';
 import { get, post } from '../common/apiClient';
 
