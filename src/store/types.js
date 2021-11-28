@@ -14,7 +14,7 @@ export const actions = {
 
 export const mutations = {
   setUserDevices: 'setUserDevices',
-  setUser: 'setUser',
+  setUserIdentity: 'setUserIdentity',
   setUsers: 'setUsers',
   setLoading: 'setLoading',
 };

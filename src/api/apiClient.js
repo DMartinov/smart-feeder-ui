@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ApiError from '../exceptions/ApiError';
-import { apiUrls as urls } from './urls';
+import { apiUrls as urls } from '../common/urls';
 
 const api = axios.create({
   withCredentials: true,
@@ -20,7 +20,7 @@ api.interceptors.response.use((config) => config, async (error) => {
     originalRequest.isRetry = true;
     try {
       // update access token
-      const response = await axios.get(`${process.env.API_URL}/${urls.user.refresh}`, { withCredentials: true });
+      const response = await axios.get(`${process.env.API_URL}/${urls.auth.refresh}`, { withCredentials: true });
       localStorage.accessToken = response.accessToken;
       return api.request(originalRequest);
     } catch {

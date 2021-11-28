@@ -36,7 +36,7 @@ export default defineComponent({
         router.push({ name: routeNames.login });
       },
       loggedIn: computed(() => store.getters[getters.isLoggedIn]),
-      username: computed(() => store.state.user?.name),
+      username: computed(() => store.state.userIdentity?.name),
     };
   },
 });

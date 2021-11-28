@@ -1,16 +1,19 @@
 const userBaseUrl = 'user';
+const authBaseUrl = 'auth';
 const deviceBaseUrl = 'device';
 // const historyBaseUrl = 'history';
 // const deviceLogBaseUrl = 'device-log';
 // const scheduleBaseUrl = 'schedule';
 
 export const apiUrls = {
+  auth: {
+    signUp: `${authBaseUrl}/signUp`,
+    logIn: `${authBaseUrl}/login`,
+    logOut: `${authBaseUrl}/logOut`,
+    refresh: `${authBaseUrl}/refresh`,
+  },
   user: {
-    logIn: `${userBaseUrl}/login`,
     sendRegistrationLink: `${userBaseUrl}/sendRegistrationLink`,
-    signUp: `${userBaseUrl}/signUp`,
-    logOut: `${userBaseUrl}/logOut`,
-    refresh: `${userBaseUrl}/refresh`,
     getUsers: `${userBaseUrl}/getUsers`,
     deleteUser: `${userBaseUrl}/delete`,
   },

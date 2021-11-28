@@ -1,4 +1,4 @@
-import { get, post } from 'src/common/apiClient';
+import { get, post } from 'src/api/apiClient';
 import { apiUrls as url } from '../common/urls';
 
 export default {

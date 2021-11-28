@@ -4,6 +4,7 @@ import { parseJwt } from 'src/common/utils';
 import { mutations, actions, getters } from './types';
 import deviceApi from '../api/deviceApi';
 import userApi from '../api/userApi';
+import authApi from '../api/authApi';
 
 /*
  * If not building with SSR mode, you can
@@ -50,8 +51,8 @@ export default store((/* { ssrContext } */) => {
       [mutations.setUserDevices](state, devices) {
         state.devices = devices ?? [];
       },
-      [mutations.setUser](state, user) {
-        state.user = user;
+      [mutations.setUserIdentity](state, user) {
+        state.userIdentity = user;
       },
       [mutations.setUsers](state, users) {
         state.users = users ?? [];
@@ -64,7 +65,7 @@ export default store((/* { ssrContext } */) => {
       [getters.getDeviceById]: (state) => (id) => state.devices?.find((device) => device.id === id),
       [getters.isLoading]: (state) => (action) => state.loader.isLoading
                                                   && state.loader.action === action,
-      [getters.isLoggedIn]: (state) => state.user != null,
+      [getters.isLoggedIn]: (state) => state.userIdentity != null,
     },
     actions: {
       async [actions.init]({ dispatch }) {
@@ -95,9 +96,9 @@ export default store((/* { ssrContext } */) => {
       async [actions.logIn]({ commit, dispatch }, { email, password }) {
         commit(mutations.setLoading, { isLoading: true, action: actions.logIn });
         try {
-          const response = await userApi.logIn(email, password);
+          const response = await authApi.logIn(email, password);
           localStorage.accessToken = response.accessToken;
-          commit(mutations.setUser, response.user);
+          commit(mutations.setUserIdentity, response.user);
           await dispatch(actions.init);
         } finally {
           commit(mutations.setLoading, { isLoading: false });
@@ -107,9 +108,9 @@ export default store((/* { ssrContext } */) => {
       async [actions.signUp]({ commit, dispatch }, { name, password, activationId }) {
         commit(mutations.setLoading, { isLoading: true, action: actions.signUp });
         try {
-          const response = await userApi.signUp(name, password, activationId);
+          const response = await authApi.signUp(name, password, activationId);
           localStorage.accessToken = response.accessToken;
-          commit(mutations.setUser, response.user);
+          commit(mutations.setUserIdentity, response.user);
           await dispatch(actions.init);
         } finally {
           commit(mutations.setLoading, { isLoading: false });
@@ -148,12 +149,12 @@ export default store((/* { ssrContext } */) => {
 
       async [actions.checkAuth]({ commit }) {
         try {
-          const accessToken = await userApi.refresh();
+          const accessToken = await authApi.refresh();
 
           if (accessToken) {
             localStorage.accessToken = accessToken;
             const userData = getJwtPayload(accessToken);
-            commit(mutations.setUser, userData);
+            commit(mutations.setUserIdentity, userData);
             return userData;
           }
         } catch (error) {
@@ -176,9 +177,9 @@ export default store((/* { ssrContext } */) => {
       async [actions.logOut]({ commit }) {
         commit(mutations.setLoading, { isLoading: true, action: actions.logOut });
         try {
-          await userApi.logOut();
+          await authApi.logOut();
           localStorage.removeItem('accessToken');
-          commit(mutations.setUser, null);
+          commit(mutations.setUserIdentity, null);
         } finally {
           commit(mutations.setLoading, { isLoading: false });
         }
