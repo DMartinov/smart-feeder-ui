@@ -30,9 +30,11 @@ export default route(({ store/* , ssrContext */ }) => {
   });
 
   Router.beforeEach((to, from, next) => {
-    if (to.name === routeNames.login || to.name === routeNames.signUp) {
-      // login route is always  okay (we could use the requires auth flag below).
-      // prevent a redirect loop
+    const loginOrSignUpRoute = to.name === routeNames.login || to.name === routeNames.signUp;
+    if (loginOrSignUpRoute) {
+      if (store.getters.isLoggedIn) {
+        next({ name: routeNames.devices });
+      }
       next();
     } else if (to.meta && to.meta.requiresAuth === false) {
       next(); // requires auth is explicitly set to false

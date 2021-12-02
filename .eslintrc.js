@@ -69,6 +69,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'prefer-promise-reject-errors': 'off',
     'no-console': 'off',
+    'max-len': ["error", { "code": 130 }],
 
 
     // allow debugger during development only

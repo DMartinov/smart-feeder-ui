@@ -13,4 +13,8 @@ export default {
   async deleteDevice(id) {
     return post(url.device.delete, { id });
   },
+
+  async blockUser(deviceId, userId, blocked) {
+    return post(url.device.blockUser, { deviceId, userId, blocked });
+  },
 };

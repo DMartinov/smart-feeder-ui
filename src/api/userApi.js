@@ -6,8 +6,8 @@ export default {
     return get(url.user.getUsers);
   },
 
-  sendRegistrationLink(email) {
-    return post(url.user.sendRegistrationLink, { email });
+  sendRegistrationLink(email, deviceId) {
+    return post(url.user.sendRegistrationLink, { email, deviceId });
   },
 
   deleteUser(id) {

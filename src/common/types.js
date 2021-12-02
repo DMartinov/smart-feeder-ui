@@ -1,5 +1,10 @@
 import { link } from 'src/common/urls';
 
+export const userRole = {
+  admin: 'admin',
+  user: 'user',
+};
+
 export const navMenuList = [
   {
     icon: 'dashboard',
@@ -30,6 +35,7 @@ export const navMenuList = [
     label: 'Users',
     separator: false,
     link: link.users.index,
+    roles: [userRole.admin],
   },
   {
     icon: 'device_hub',

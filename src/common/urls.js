@@ -24,6 +24,7 @@ export const apiUrls = {
     updateState: `${deviceBaseUrl}/updateState`,
     setCommand: `${deviceBaseUrl}/setCommand`,
     delete: `${deviceBaseUrl}/delete`,
+    blockUser: `${deviceBaseUrl}/block-user`,
   },
 
 };

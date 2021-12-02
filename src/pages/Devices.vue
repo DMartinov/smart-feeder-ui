@@ -23,9 +23,7 @@
       </template>
       <template v-slot:body-cell-users="props">
           <q-td :props="props">
-            <div v-for="user in props.row.users" :key="user.id">
-              {{ user.name }} - {{user.role}}
-            </div>
+            <device-managers :users="props.row.users" :deviceId="props.row.id"/>
           </q-td>
       </template>
       <template v-slot:body-cell-dashboard="props">
@@ -54,6 +52,7 @@
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import AddDeviceModal from 'src/components/AddDeviceModal.vue';
+import DeviceManagers from '../components/DeviceManagers.vue';
 import routeNames from '../router/routeNames';
 import ApiError from '../exceptions/ApiError';
 import { notifySuccess, notifyError } from '../common/notification';
@@ -61,23 +60,23 @@ import { actions, getters } from '../store/types';
 
 const columns = [
   {
-    name: 'name', label: 'Name', field: 'name', sortable: true,
+    name: 'name', label: 'Name', field: 'name', align: 'left', sortable: true,
   },
   {
-    name: 'users', label: 'Users', field: 'users',
+    name: 'users', label: 'Users', align: 'left', field: 'users',
   },
   {
-    name: 'dashboard', label: 'Dashboard', field: 'dashboard',
+    name: 'dashboard', label: 'Dashboard', align: 'left', field: 'dashboard',
   },
   {
-    name: 'id', align: 'center', label: 'id', field: 'id', sortable: true,
+    name: 'id', align: 'left', label: 'id', field: 'id', sortable: true,
   },
   {
     name: 'delete', label: 'Delete', field: 'delete',
   },
 ];
 export default {
-  components: { AddDeviceModal },
+  components: { AddDeviceModal, DeviceManagers },
   setup() {
     const store = useStore();
 

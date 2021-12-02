@@ -34,7 +34,7 @@ export default store((/* { ssrContext } */) => {
          * @property {Boolean} role
          * @property {Array} array of device ids
         */
-        user: getJwtPayload(localStorage.accessToken),
+        userIdentity: getJwtPayload(localStorage.accessToken),
         /** @typedef {Array} array of user devices
          * @property {Number} id
          * @property {Number} email
@@ -66,6 +66,7 @@ export default store((/* { ssrContext } */) => {
       [getters.isLoading]: (state) => (action) => state.loader.isLoading
                                                   && state.loader.action === action,
       [getters.isLoggedIn]: (state) => state.userIdentity != null,
+      [getters.userRole]: (state) => state.userIdentity?.role,
     },
     actions: {
       async [actions.init]({ dispatch }) {
@@ -117,10 +118,10 @@ export default store((/* { ssrContext } */) => {
         }
       },
 
-      async [actions.sendRegistrationLink]({ commit, dispatch }, email) {
+      async [actions.sendRegistrationLink]({ commit, dispatch }, { email, deviceId = null }) {
         commit(mutations.setLoading, { isLoading: true, action: actions.sendRegistrationLink });
         try {
-          await userApi.sendRegistrationLink(email);
+          await userApi.sendRegistrationLink(email, deviceId);
           await dispatch(actions.getUsers);
         } finally {
           commit(mutations.setLoading, { isLoading: false });
@@ -141,6 +142,16 @@ export default store((/* { ssrContext } */) => {
         commit(mutations.setLoading, { isLoading: true, action: actions.deleteDevice });
         try {
           await deviceApi.deleteDevice(id);
+          await dispatch(actions.getUserDevices);
+        } finally {
+          commit(mutations.setLoading, { isLoading: false });
+        }
+      },
+
+      async [actions.blockDeviceUser]({ commit, dispatch }, { deviceId, userId, blocked }) {
+        commit(mutations.setLoading, { isLoading: true, action: actions.blockDeviceUser });
+        try {
+          await deviceApi.blockUser(deviceId, userId, blocked);
           await dispatch(actions.getUserDevices);
         } finally {
           commit(mutations.setLoading, { isLoading: false });

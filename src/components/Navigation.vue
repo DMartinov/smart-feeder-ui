@@ -15,14 +15,22 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import { navMenuList } from '../common/types';
+import { getters } from '../store/types';
 
-export default defineComponent({
+export default {
   setup() {
-    return { navMenuList };
+    const store = useStore();
+
+    return {
+      navMenuList: computed(
+        () => navMenuList.filter((menuItem) => menuItem.roles?.includes(store.getters[getters.userRole]) ?? true),
+      ),
+    };
   },
-});
+};
 </script>
 
 <style>
