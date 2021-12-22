@@ -1,23 +1,15 @@
 <template>
   <q-page padding>
-    <div class="row">
-      <div class="col-1">
-        <q-badge color="green" rounded class="q-mr-sm" />Online
-        <q-btn class="q-mt-md">Feed now</q-btn>
+    <div class="status-container">
+      <q-badge color="green" rounded class="q-mr-sm" />Online
     </div>
-    <div class="col">
-      <div class="row">
-        <div class="col">
-          <tank :fullness="device.charge" color="green" />
-        </div>
-        <div class="col">
-          <tank :fullness="device.feed" color="blue" />
-        </div>
-        <div class="col">
-          <tank :fullness="device.water" color="brown" />
-        </div>
-      </div>
+    <div class="tanks-container">
+        <tank :fullness="device.feed" type="feed" />
+        <tank :fullness="device.water" type="water" />
+        <tank :fullness="device.charge" type="charge" />
     </div>
+    <div class="controls-container">
+      <q-btn class="q-mt-md" color="primary">Feed now</q-btn>
     </div>
   </q-page>
 </template>
@@ -26,6 +18,7 @@
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
+import { notifyInfo } from 'src/common/notification';
 import routeNames from '../router/routeNames';
 import { getters } from '../store/types';
 import Tank from '../components/Tank.vue';
@@ -39,12 +32,26 @@ export default defineComponent({
     const route = useRoute();
 
     if (!route.params.deviceId) {
+      notifyInfo('Please choose device to go to the dashboard');
       router.push({ name: routeNames.devices });
     }
 
     return {
-      device: computed(() => store.getters[getters.getDeviceById](1) ?? {}),
+      device: computed(() => store.getters[getters.getDeviceById](route.params.deviceId) ?? {}),
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+  .tanks-container {
+    display: flex;
+    justify-content: start;
+    gap: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .status-container {
+    margin-bottom: 20px;
+  }
+</style>

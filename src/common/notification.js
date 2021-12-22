@@ -17,3 +17,10 @@ export const notifySuccess = (message) => {
     message,
   });
 };
+
+export const notifyInfo = (message) => {
+  Notify.create({
+    type: 'info',
+    message,
+  });
+};

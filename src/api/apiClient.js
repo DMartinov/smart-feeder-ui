@@ -16,7 +16,7 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use((config) => config, async (error) => {
   const originalRequest = error.config;
-  if (error.response.status === 401 && originalRequest?.isRetry) {
+  if (error.response.status === 401 && !originalRequest?.isRetry) {
     originalRequest.isRetry = true;
     try {
       // update access token
@@ -24,7 +24,8 @@ api.interceptors.response.use((config) => config, async (error) => {
       localStorage.accessToken = response.accessToken;
       return api.request(originalRequest);
     } catch {
-      console.log('Not authorized');
+      localStorage.removeItem('accessToken');
+      window.location.href = '/#/login'; // TODO: use router
     }
   }
   throw error;

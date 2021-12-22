@@ -34,10 +34,11 @@
 <script>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import useErrorHandling from 'src/hooks/useErrorHandling';
+import useValidationRules from 'src/hooks/useValidationRules';
 import ApiError from '../exceptions/ApiError';
 import { actions, getters } from '../store/types';
 import { notifySuccess, notifyError } from '../common/notification';
-import { isValidEmail } from '../common/utils';
 
 export default {
   emits: ['close'],
@@ -50,27 +51,10 @@ export default {
   setup(props, context) {
     const email = ref('');
     const show = ref(true);
-    const errors = ref(null);
+
     const store = useStore();
-
-    // TODO: add hook
-    const hasError = (fieldName) => {
-      if (errors.value != null) {
-        return errors.value.some((error) => error.param === fieldName);
-      }
-
-      return false;
-    };
-
-    // TODO: add hook
-    const errorMessage = (fieldName) => {
-      if (errors.value != null) {
-        const error = errors.value.find((e) => e.param === fieldName);
-        return error?.msg;
-      }
-
-      return null;
-    };
+    const { errors, errorMessage, hasError } = useErrorHandling();
+    const { emailRules } = useValidationRules();
 
     return {
       email,
@@ -78,9 +62,7 @@ export default {
       hasError,
       errorMessage,
       loading: computed(() => store.getters[getters.isLoading](actions.sendRegistrationLink)),
-      emailRules: [
-        (val) => (val != null && isValidEmail(val)) || 'Invalid email',
-      ],
+      emailRules,
       close() {
         context.emit('close');
       },

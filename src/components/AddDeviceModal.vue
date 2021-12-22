@@ -60,6 +60,8 @@
 <script>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import useErrorHandling from 'src/hooks/useErrorHandling';
+import useValidationRules from 'src/hooks/useValidationRules';
 import ApiError from '../exceptions/ApiError';
 import { actions, getters } from '../store/types';
 import { notifySuccess, notifyError } from '../common/notification';
@@ -71,29 +73,11 @@ export default {
     const name = ref('');
     const login = ref('');
     const password = ref('');
-    const errors = ref(null);
     const show = ref(true);
 
     const store = useStore();
-
-    // TODO: add hook
-    const hasError = (fieldName) => {
-      if (errors.value != null) {
-        return errors.value.some((error) => error.param === fieldName);
-      }
-
-      return false;
-    };
-
-    // TODO: add hook
-    const errorMessage = (fieldName) => {
-      if (errors.value != null) {
-        const error = errors.value.find((e) => e.param === fieldName);
-        return error?.msg;
-      }
-
-      return null;
-    };
+    const { errors, errorMessage, hasError } = useErrorHandling();
+    const { nameRules } = useValidationRules();
 
     const create = async () => {
       try {
@@ -122,10 +106,7 @@ export default {
       name,
       login,
       password,
-      nameRules: [
-        (val) => val?.length >= 3 || 'Name must be more than 3 characters',
-        (val) => val?.length < 30 || 'Name must be less than 30 characters',
-      ],
+      nameRules,
       hasError,
       errorMessage,
       loading: computed(() => store.getters[getters.isLoading](actions.addDevice)),

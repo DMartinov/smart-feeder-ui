@@ -33,10 +33,11 @@
 import { defineComponent, ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import useErrorHandling from 'src/hooks/useErrorHandling';
+import useValidationRules from 'src/hooks/useValidationRules';
 import routeNames from '../router/routeNames';
 import ApiError from '../exceptions/ApiError';
 import { actions, getters } from '../store/types';
-import { isValidEmail } from '../common/utils';
 import { notifyError } from '../common/notification';
 
 export default defineComponent({
@@ -44,29 +45,12 @@ export default defineComponent({
     const isPwd = ref(true);
     const password = ref('');
     const email = ref('');
-    const errors = ref(null);
 
     const store = useStore();
     const router = useRouter();
 
-    // TODO: add hook
-    const hasError = (fieldName) => {
-      if (errors.value != null) {
-        return errors.value.some((error) => error.param === fieldName);
-      }
-
-      return false;
-    };
-
-    // TODO: add hook
-    const errorMessage = (fieldName) => {
-      if (errors.value != null) {
-        const error = errors.value.find((e) => e.param === fieldName);
-        return error?.msg;
-      }
-
-      return null;
-    };
+    const { errors, errorMessage, hasError } = useErrorHandling();
+    const { emailRules } = useValidationRules();
 
     const logIn = async () => {
       try {
@@ -84,9 +68,7 @@ export default defineComponent({
       isPwd,
       password,
       email,
-      emailRules: [
-        (val) => (val != null && isValidEmail(val)) || 'Invalid email',
-      ],
+      emailRules,
       logIn,
       hasError,
       errorMessage,

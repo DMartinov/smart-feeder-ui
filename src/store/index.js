@@ -28,18 +28,18 @@ export default store((/* { ssrContext } */) => {
     state() {
       return {
         /** @typedef {Object} user
-         * @property {Number} id
-         * @property {Number} email
+         * @property {String} id
+         * @property {String} email
          * @property {String} name
-         * @property {Boolean} role
+         * @property {String} role
          * @property {Array} array of device ids
         */
         userIdentity: getJwtPayload(localStorage.accessToken),
         /** @typedef {Array} array of user devices
-         * @property {Number} id
-         * @property {Number} email
+         * @property {String} id
+         * @property {String} email
          * @property {String} name
-         * @property {Boolean} role
+         * @property {String} role
          * @property {Array} devices
         */
         users: [],
@@ -161,18 +161,16 @@ export default store((/* { ssrContext } */) => {
       async [actions.checkAuth]({ commit }) {
         try {
           const accessToken = await authApi.refresh();
+          if (!accessToken) return null;
 
-          if (accessToken) {
-            localStorage.accessToken = accessToken;
-            const userData = getJwtPayload(accessToken);
-            commit(mutations.setUserIdentity, userData);
-            return userData;
-          }
-        } catch (error) {
-          console.log(error);
+          localStorage.accessToken = accessToken;
+          const userData = getJwtPayload(accessToken);
+          commit(mutations.setUserIdentity, userData);
+          return userData;
+        } catch (ex) {
+          commit(mutations.setUserIdentity, null);
+          throw ex;
         }
-
-        return null;
       },
 
       async [actions.getUsers]({ commit }) {

@@ -1,7 +1,7 @@
 <template>
     <div v-for="user in deviceUsers" :key="user.id" class="row items-center">
-        <div class="col-10">{{ user.name }}</div>
-        <div class="col">
+        <div class="col-10">{{ user.name ?? '(Invintation sent)' }}</div>
+        <div class="col" v-if="!user.isDeviceOwner">
             <q-btn v-if="user.blocked"
                 round
                 flat
