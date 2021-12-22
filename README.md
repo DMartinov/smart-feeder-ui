@@ -1,6 +1,6 @@
 # Smart Feeder (smart-feeder-ui)
 
-UI based on Quasar Framework app to control a dog feeder.
+UI based on Quasar Framework to control a dog feeder.
 
 ## Install the dependencies
 ```bash
